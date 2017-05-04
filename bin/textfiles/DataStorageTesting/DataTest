@@ -1,0 +1,14 @@
+define table emp having fields(animal varchar);
+define table emp2 having fields(animals varchar, dog char(3));
+define table emp3 having fields(animal varchar, dog char(3), dog char(4));
+define table emp4 having fields(animal varchar, dog char(3));
+define table emp5 having fields(animal varchar, dog char(3));
+define table emp6 having fields(animal varchar, dog char(3));
+define table emp7 having fields(animal varchar, dog char(3));
+define table emp8 having fields(animal varchar, dog char(3));
+define table emp9 having fields(animal varchar, ribbs integer, dog char(3));
+define table emp10 having fields(animal varchar, porkchops real, dog char(3));
+define table emp11 having fields(animal varchar, dog char(3));
+define table emp12 having fields(animal varchar, dog char(3));
+define table emp13 having fields(animal varchar, dog char(3));
+define table emp14 having fields(animal varchar, dog char(3));

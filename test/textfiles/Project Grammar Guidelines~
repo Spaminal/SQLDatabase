@@ -1,0 +1,136 @@
+Project Grammar Guidelines
+
+Print
+	{ PRINT DICTIONARY | PRINT table_name } ex: print emp; hint: it's 'print' and 
+	then a second word
+Exit
+	EXIT ex: exit;
+Read
+	READ file_name ex: read 'C:\Program Files\myfile'; hint: File names need quotes, 
+	plug everything between the quotes right into java code.
+Backup
+	BACKUP TO file_name ex: backup to '/home/dufus/blech';
+Restore
+	RESTORE FROM file_name ex: restore from 'fred';
+Define Table
+	DEFINE TABLE table_name HAVING FIELDS (extended_field_list) 
+	ex: define table emp having fields(name varchar, age integer, 
+	state char(2) ) ; hint: Don't try to parse out the extended_field_list 
+	with regex's – it's way too hard – just capture the string 
+	for later use.
+Rename
+	RENAME TABLE table_name TO table_name ex: rename table fred to jones;
+Drop
+	DROP TABLE table_name ex: drop table Dave;
+Define Index
+	DEFINE INDEX ON table_name ( field_name ) ex: define index on emp(sal) ;
+Delete
+	DELETE table_name [WHERE boolean_expression ] ex: Delete emp where sal < 100; 
+	ex: delete emp; hint: don't try to parse out the boolean_expression
+Insert
+	INSERT (value_list) INTO table_name ex: 
+	insert (1, 'hello', 33.1, '02/19/2014' ) into emp; 
+	hint: don't try to parse out the value_list
+Update
+	 UPDATE table_name SET field_name = value [WHERE boolean_expression] 
+	 ex: update emp set sal = 200 where name = 'jones';	
+Selection
+	SELECT query_list [WHERE boolean_expression] ex: select emp where sal < 100;
+Projection
+	PROJECT query_list OVER field_list ex: project emp over a, b, c;
+Join
+	JOIN query_list AND query_list ex: join emp and dept;
+Intersection
+	INTERSECT query_list AND query_list ex: intersect emp and dept;
+Union
+	UNION query_list AND query_list ex: union emp and dept;
+Minus
+	MINUS query_list AND query_list ex: minus emp and dept;
+Order
+	ORDER query_list BY field_name [DESCENDING] ex: order emp by sal;
+	
+table_name ::= letter [ title_string ]
+title_string ::= { letter | digit } [ title_string ]
+extended_field_list ::= field_name type [ , extended_field_list ]
+field_name ::= letter [ field_name ]
+type ::= { INTEGER | DATE | REAL | VARCHAR | CHAR(integer) | BOOLEAN }
+field_list ::= field_name [, field_list]
+query_list ::= { table_name | ( query_statement ) }
+boolean_expression ::= field_name relop value
+value ::= { integer | real | date | string_expression | boolean }
+value_list ::= value[, value_list]
+letter ::= { a – z | A – Z }
+digit ::= { 0 – 9 }
+char ::= <any letter>
+integer ::= digit[integer ]
+real ::= { integer[.][integer] | .integer}
+date ::= 'dd/dd/dddd'
+d ::= digit
+string ::= char[string] <strings in general may include any character, 
+	word space, digit, or other characters>
+string_expression ::= 'string'
+boolean ::= {TRUE | FALSE }
+relop ::= { = | != | < | > | <= | >= }
+file_name ::= 'string' <The string must represent a file address, 
+either relative or absolute>
+
+COMMENTS – READ CAREFULLY:
+
+*Italics: there are examples of acceptable grammar in italics – read the 
+	rest of the comments carefully for special cases and variations.
+
+*Recommend you identify upper case (ie reserved words) and punctuation 
+	with your regular expression. 
+Store the remaining details in variables in your command classes 
+	for later parsing. Do NOT try to capture ever little detail with your 
+	reg ex's – it is too hard to find universal solutions for the entire 
+	spectrum of possible input.
+
+Symbols
+
+::= definition
+[] optional
+| or
+{} defines groups of 'or' clauses
+<> A descriptive statement. The contained words do not refer to other 
+	words in the grammar, but are written in English.
+All other symbols are part of the grammar
+
+Capitalization
+
+Lower case words are defined terms in the grammar
+Upper case words are reserved words in the grammar
+Note that reserved words are NOT case sensitive 
+	(e.g., TRUE is equivalent to true )
+
+Word spaces
+
+These include space (' '), \t, \n, \r, \f
+Punctuations ( including ',' ';' '(' ')', or relop) do not require a word 
+	space before or after (although they may have one or more word spaces 
+	before or after) HINT: this rule is the one that students have the 
+	most trouble with.
+*Otherwise, all reserved words and other grammar entities 
+	( including table_name, file_name, field_name, value)must be separated 
+	by at least one word space
+
+Dates and string_expressions
+
+String_expressions include varchar and char values. The general rule is 
+	that anything that might be case sensitive is surrounded by single 
+	quotes. This includes string_expressions, file_names, and dates.
+Dates are semantically expressed as month/day/year. For appropriate syntax, 
+	we mimic what is acceptable to Java – see the javadocs for DateFormat.
+String_expressions and file_names may include spaces but no other word 
+	space characters
+String_expressions and file_names are the exception to the case insensitive
+ 	rule: these ARE case sensitive
+Both dates and string_expressions must be separated from other entities 
+	by a word space (unless the entity is a punctuation)
+Char expressions must be followed by an integer in parentheses – the 
+	integer describes the mandatory length of the char expression
+	
+	
+	
+	
+	

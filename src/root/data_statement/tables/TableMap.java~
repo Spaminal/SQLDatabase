@@ -1,0 +1,194 @@
+/* Jacob Culley
+ * CS 210 
+ */
+
+package root.data_statement.tables;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import root.exceptions.DuplicateDataException;
+import root.exceptions.TableException;
+import root.exceptions.TableNotFoundException;
+
+/**
+ * Creates and manages Table Collection.
+ */
+public class TableMap {
+
+	private static TableMap tm;
+	private HashMap<String, Table> tableMap;
+	private Pattern fieldTypePattern = Pattern.compile(
+			"([a-zA-Z]+)\\s+(integer|date|real|varchar|"
+					+ "char\\s*\\(\\s*[\\d]+\\s*\\)|boolean)",
+			Pattern.CASE_INSENSITIVE);
+
+	/**
+	 * Allows for one and only one Table Collection
+	 */
+	private TableMap() {
+		tableMap = new HashMap<String, Table>();
+	}
+
+	/**
+	 * Gets Table Collection.
+	 */
+	public static TableMap getTableMap() {
+		if (tm == null) {
+			tm = new TableMap();
+		}
+		return tm;
+	}
+
+	/**
+	 * Creates a new empty Table with Name.
+	 */
+	public void createTable(String tableName) {
+		try {
+			if (tableMap.containsKey(tableName)) {
+				throw new DuplicateDataException("Table Already Exists");
+			} else {
+				tableMap.put(tableName, new Table(tableName));
+			}
+		} catch (DuplicateDataException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * Creates a new Table containing fields and their type.
+	 */
+	public void createTable(String tableName, String[] withFields) {
+		try {
+			if (tableMap.containsKey(tableName)) {
+				throw new DuplicateDataException("Table Already Exists");
+			} else if (dupeField(withFields)) {
+				throw new DuplicateDataException("Duplicate Fields Detected");
+			} else {
+				tableMap.put(tableName, new Table(tableName, withFields));
+			}
+		} catch (DuplicateDataException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * Renames Table with tableName to newName.
+	 */
+	public void renameTable(String prevName, String newName) {
+		try {
+			if (tableMap.containsKey(newName)) {
+				throw new TableException("Can't Rename to an Existing Table");
+			} else if (tableMap.containsKey(prevName)) {
+				Table temp = tableMap.get(prevName);
+				temp.rename(newName);
+				tableMap.remove(prevName);
+				tableMap.put(newName, temp);
+			} else {
+				throw new TableNotFoundException("No Table Found To Rename.");
+			}
+		} catch (TableException e) {
+			System.out.println(e.getMessage());
+		} catch (TableNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * Removes Table with tableName.
+	 */
+	public void removeTable(String tableName) {
+		try {
+			if (tableMap.containsKey(tableName)) {
+				tableMap.remove(tableName);
+			} else {
+				throw new TableNotFoundException("No Table Found To Remove.");
+			}
+		} catch (TableNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * Gets Table with tableName.
+	 */
+	public Table getTable(String tableName) {
+		Table table = null;
+		try {
+			if (tableMap.containsKey(tableName)) {
+				table = tableMap.get(tableName);
+			} else {
+				throw new TableNotFoundException("Table Not Found");
+			}
+		} catch (TableNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+		return table;
+	}
+
+	/**
+	 * Checks field list for duplicate names
+	 */
+	public boolean dupeField(String[] withFields) {
+		ArrayList<String> fieldNames = new ArrayList<String>();
+		for (String fieldName : withFields) {
+			Matcher dupeMatch = fieldTypePattern.matcher(fieldName);
+			if (dupeMatch.matches()) {
+				if (fieldNames.contains(dupeMatch.group(1))) {
+					return true;
+				}
+				fieldNames.add(dupeMatch.group(1));
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Displays the Tables contained in this Table Collection.
+	 */
+	public void printTableNames() {
+
+		if (tableMap.isEmpty()) {
+			System.out.println("Table Collection is empty");
+		} else {
+			System.out
+					.println("Table Collection contains the following Tables");
+			for (String key : tableMap.keySet()) {
+				System.out.println(key);
+			}
+		}
+	}
+
+	/**
+	 * Prints out the contents of the Table Collection.
+	 */
+	public void printTables() {
+		if (tableMap.isEmpty()) {
+			System.out.println("----------------");
+			System.out.println("Database is empty");
+		} else {
+			for (String key : tableMap.keySet()) {
+				System.out.println("----------------");
+				System.out.println("The Table: " + key
+						+ ", Contains the follwing");
+				System.out.println("----------------");
+				tableMap.get(key).printFields();
+				System.out.println();
+			}
+		}
+	}
+
+	/**
+	 * Puts TableMap Keys in an array list for indexing
+	 */
+
+	public ArrayList<String> getTableList() {
+		ArrayList<String> tableList = new ArrayList<String>();
+		for (String key : tableMap.keySet()) {
+			tableList.add(key);
+		}
+		return tableList;
+	}
+}

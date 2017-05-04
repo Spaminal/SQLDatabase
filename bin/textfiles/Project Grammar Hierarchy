@@ -1,0 +1,53 @@
+Project Grammar Hierarchy 
+
+statement { admin_statement; | ddl_statement; | dml_statement; | query_statement; }
+
+	statement.admin { exit|print|read|backup|restore }
+		EXIT
+		{PRINT DICTIONARY | PRINT table_name }
+		READ file_name
+		BACKUP TO file_name
+		RESTORE FROM file_name
+		
+	statement.ddl { define_table | rename | drop | define_index }
+		DEFINE TABLE table_name HAVING FIELDS (extended_field_list)
+		RENAME TABLE table_name to table_name
+		  DROP TABLE table_name
+		DEFINE INDEX ON table_name (field_name)
+		
+	statement.dml { delete | insert | update }
+		DELETE table_name [WHERE boolean_expression]
+			boolean_expression = field_name relop value	
+		INSERT (value_list) INTO table_name
+			- value_list
+				- value = { integer | real | date | string_expression | boolean }
+		UPDATE table_name SET field_name [WHERE boolean_expression]
+		
+	statement.query { selection | projection | join | intersection | union | minus | order}
+		SELECT query_list [WHERE boolean_expression]
+		  PROJECT query_list OVER field_list
+		     JOIN query_list AND query_list
+		INTERSECT query_list AND query_list
+		    UNION query_list AND query_list
+		    MINUS query_list AND query_list
+		ORDER query_list BY field_name
+		
+Data Type Definitions
+
+	value = { integer | real | date | string_expression | boolean }
+		integer = digit [integer]
+		real = { integer [.] [integer] }
+		date = 'dd/dd/dddd'
+		
+	table_name
+	title_string
+			
+	boolean_expression = field_name relop value	
+		
+		
+[^\\d{2}/\\d{2}/\\d{4}].		
+		
+		
+		
+		
+		

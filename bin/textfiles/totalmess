@@ -1,0 +1,6 @@
+select 
+ emp where sal > 500 
+;
+
+
+exit;

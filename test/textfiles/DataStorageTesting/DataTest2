@@ -1,0 +1,15 @@
+rename table emp to ham;
+rename table emp2 to ham2;
+rename table emp3 to ham3;
+rename table emp4 to ham4;
+rename table emp5 to ham5;
+rename table emp6 to ham6;
+rename table emp7 to ham7;
+rename table emp8 to ham8;
+rename table emp9 to ham9;
+rename table emp10 to ham10;
+rename table emp11 to ham11;
+rename table emp12 to ham12;
+rename table emp13 to ham13;
+rename table emp14 to ham14;
+print dictionary;

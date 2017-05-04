@@ -1,0 +1,9 @@
+define table ham having fields(ribbit char(3), chin char(6));
+define table cheese having fields(lactose real, variant char(9));
+define table daquean having fields(nipplies integer, feet char(2));
+define table daquean2 having fields(nipplies integer, feet char(2));
+define table daquean3 having fields(nipplies integer, feet char(2));
+define table daquean4 having fields(nipplies integer, feet char(2));
+define table daquean5 having fields(nipplies integer, feet char(2));
+define table daquean6 having fields(nipplies integer, feet char(2));
+define table daquean7 having fields(nipplies integer, feet char(2));
